@@ -21,7 +21,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -113,13 +115,36 @@ input {
   background: #ffffff;
 }
 
-input:focus {
+select,
+textarea {
+  width: 100%;
+  border: 1px solid #bfccd8;
+  border-radius: 8px;
+  padding: 0 14px;
+  color: #18212f;
+  background: #ffffff;
+}
+
+select {
+  min-height: 54px;
+}
+
+textarea {
+  min-height: 108px;
+  padding-top: 12px;
+  resize: vertical;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
   border-color: #2b8075;
   outline: 3px solid rgba(43, 128, 117, 0.16);
 }
 
 .primary-button,
-.secondary-button {
+.secondary-button,
+.danger-button {
   min-height: 54px;
   border: 0;
   border-radius: 8px;
@@ -141,6 +166,17 @@ input:focus {
 .secondary-button {
   color: #2b4a80;
   background: #e9eff8;
+}
+
+.danger-button {
+  color: #8a1f1f;
+  background: #ffe8e8;
+}
+
+.danger-button:disabled,
+.secondary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .primary-link-button {
@@ -166,6 +202,15 @@ input:focus {
   padding: 12px 14px;
   color: #8a1f1f;
   background: #fff1f1;
+  font-weight: 700;
+}
+
+.success-message {
+  border: 1px solid #a7d9bf;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #1d6b42;
+  background: #effaf3;
   font-weight: 700;
 }
 
@@ -274,6 +319,224 @@ input:focus {
   margin-bottom: 10px;
 }
 
+.fixed-rule-panel {
+  margin-bottom: 16px;
+  border: 1px solid #bfd8e5;
+  border-radius: 8px;
+  padding: 18px;
+  background: #f5fbff;
+}
+
+.fixed-rule-panel p {
+  margin: 0;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.tab-button {
+  min-height: 46px;
+  border: 1px solid #cdd8e4;
+  border-radius: 8px;
+  padding: 0 14px;
+  color: #29384a;
+  background: #ffffff;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.tab-button.is-selected {
+  border-color: #2b8075;
+  color: #ffffff;
+  background: #2b8075;
+}
+
+.admin-message {
+  margin-bottom: 16px;
+}
+
+.admin-section {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-form,
+.record-card,
+.summary-card {
+  width: 100%;
+  border: 1px solid #d7e0ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 18px 40px rgba(28, 42, 59, 0.08);
+}
+
+.admin-form {
+  display: grid;
+  gap: 16px;
+  padding: 20px;
+}
+
+.form-title {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-title h2 {
+  margin: 0;
+}
+
+.text-button {
+  min-height: 40px;
+  border: 0;
+  padding: 0;
+  color: #2b4a80;
+  background: transparent;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.toggle-label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.toggle-label input {
+  width: 22px;
+  min-height: 22px;
+}
+
+.records-list {
+  display: grid;
+  gap: 14px;
+}
+
+.record-card {
+  display: grid;
+  gap: 16px;
+  padding: 18px;
+}
+
+.record-card h2 {
+  margin-top: 10px;
+}
+
+.record-card p {
+  margin: 4px 0 0;
+  color: #607083;
+}
+
+.card-actions {
+  display: grid;
+  gap: 10px;
+}
+
+.status-badge {
+  display: inline-grid;
+  min-height: 30px;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0 10px;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.status-badge.is-active {
+  color: #1d6b42;
+  background: #e6f7ed;
+}
+
+.status-badge.is-inactive {
+  color: #6d7480;
+  background: #edf0f3;
+}
+
+.summary-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.summary-card {
+  padding: 18px;
+}
+
+.summary-card p {
+  margin: 0 0 8px;
+  color: #607083;
+}
+
+.summary-card strong {
+  display: block;
+  color: #18212f;
+  font-size: 1.45rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.attendance-list {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.attendance-card {
+  display: grid;
+  gap: 14px;
+  border: 1px solid #d7e0ea;
+  border-radius: 8px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.attendance-card h2 {
+  margin: 0;
+  font-size: 1.12rem;
+}
+
+.status-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.status-option {
+  min-height: 48px;
+  border: 1px solid #cdd8e4;
+  border-radius: 8px;
+  color: #29384a;
+  background: #f7fafc;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.status-option.is-selected {
+  border-color: #2b8075;
+  color: #ffffff;
+  background: #2b8075;
+}
+
+.save-attendance-button {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.student-empty-message {
+  margin-top: 16px;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -302,5 +565,23 @@ input:focus {
 
   .teacher-menu-grid {
     max-width: 680px;
+  }
+
+  .form-grid,
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .record-card {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .card-actions {
+    min-width: 140px;
+  }
+
+  .status-options {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
