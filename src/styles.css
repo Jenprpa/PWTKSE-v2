@@ -1,0 +1,306 @@
+:root {
+  color: #18212f;
+  background: #eef3f7;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.page-shell {
+  width: min(100%, 960px);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+.center-shell,
+.login-shell {
+  display: grid;
+  place-items: center;
+}
+
+.login-panel,
+.status-card,
+.placeholder-panel,
+.menu-card {
+  width: 100%;
+  border: 1px solid #d7e0ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 18px 40px rgba(28, 42, 59, 0.08);
+}
+
+.login-panel {
+  max-width: 440px;
+  padding: 28px 20px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #28665d;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+h1,
+h2,
+p {
+  overflow-wrap: anywhere;
+}
+
+h1 {
+  margin: 0;
+  color: #18212f;
+  font-size: clamp(1.75rem, 8vw, 2.35rem);
+  line-height: 1.15;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+}
+
+.intro,
+.muted,
+.placeholder-panel p,
+.menu-card p,
+.status-card p {
+  color: #607083;
+}
+
+.intro {
+  margin: 12px 0 24px;
+}
+
+.login-form {
+  display: grid;
+  gap: 18px;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+  color: #29384a;
+  font-weight: 700;
+}
+
+input {
+  width: 100%;
+  min-height: 54px;
+  border: 1px solid #bfccd8;
+  border-radius: 8px;
+  padding: 0 14px;
+  color: #18212f;
+  background: #ffffff;
+}
+
+input:focus {
+  border-color: #2b8075;
+  outline: 3px solid rgba(43, 128, 117, 0.16);
+}
+
+.primary-button,
+.secondary-button {
+  min-height: 54px;
+  border: 0;
+  border-radius: 8px;
+  padding: 0 18px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.primary-button {
+  color: #ffffff;
+  background: #2b8075;
+}
+
+.primary-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.secondary-button {
+  color: #2b4a80;
+  background: #e9eff8;
+}
+
+.primary-link-button {
+  display: inline-grid;
+  min-height: 44px;
+  align-items: center;
+  border-radius: 8px;
+  padding: 0 16px;
+  color: #ffffff;
+  background: #2b8075;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.compact-button {
+  min-height: 44px;
+  white-space: nowrap;
+}
+
+.error-message {
+  border: 1px solid #e7b4b4;
+  border-radius: 8px;
+  padding: 12px 14px;
+  color: #8a1f1f;
+  background: #fff1f1;
+  font-weight: 700;
+}
+
+.status-card {
+  display: grid;
+  justify-items: center;
+  max-width: 320px;
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.access-card {
+  max-width: 420px;
+  gap: 14px;
+}
+
+.error-title {
+  margin: 0;
+  color: #8a1f1f;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.spinner {
+  width: 42px;
+  height: 42px;
+  border: 4px solid #dce6ef;
+  border-top-color: #2b8075;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.app-header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #d7e0ea;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.app-header .muted {
+  margin: 8px 0 0;
+}
+
+.user-summary {
+  display: grid;
+  gap: 4px;
+  margin-top: 12px;
+  color: #607083;
+}
+
+.user-summary p {
+  margin: 0;
+}
+
+.role-shell {
+  max-width: 1040px;
+}
+
+.admin-shell .app-header {
+  border-top: 4px solid #2b4a80;
+}
+
+.teacher-shell .app-header {
+  border-top: 4px solid #2b8075;
+}
+
+.placeholder-panel {
+  padding: 24px 20px;
+}
+
+.placeholder-panel p {
+  margin: 0;
+}
+
+.section-label {
+  margin-bottom: 16px;
+  color: #29384a;
+  font-weight: 800;
+}
+
+.menu-grid {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.menu-card {
+  min-height: 116px;
+  padding: 18px;
+  box-shadow: none;
+}
+
+.menu-card h2 {
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 560px) {
+  .app-header {
+    display: grid;
+  }
+
+  .compact-button {
+    width: 100%;
+  }
+
+  .action-row,
+  .primary-link-button {
+    width: 100%;
+  }
+}
+
+@media (min-width: 700px) {
+  .menu-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .teacher-menu-grid {
+    max-width: 680px;
+  }
+}
