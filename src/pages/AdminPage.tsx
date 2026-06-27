@@ -27,7 +27,7 @@ import {
 } from "../types/rotation";
 import { timestampToDisplayDate } from "../services/attendanceData";
 
-type AdminTab = "summary" | "terms" | "classrooms" | "students" | "bases" | "rotations" | "attendance";
+type AdminTab = "terms" | "classrooms" | "students" | "bases" | "rotations" | "attendance";
 
 const emptyData: AdminData = {
   academicTerms: [],
@@ -78,7 +78,6 @@ const emptyStudentForm: StudentForm = {
 };
 
 const tabs: Array<{ id: AdminTab; label: string }> = [
-  { id: "summary", label: "ภาพรวม" },
   { id: "terms", label: "ปีการศึกษา" },
   { id: "classrooms", label: "ห้องเรียน" },
   { id: "students", label: "นักเรียน" },
@@ -121,7 +120,7 @@ function formatTermName(term?: AcademicTerm) {
 }
 
 export function AdminPage() {
-  const [activeTab, setActiveTab] = useState<AdminTab>("summary");
+  const [activeTab, setActiveTab] = useState<AdminTab>("terms");
   const [data, setData] = useState<AdminData>(emptyData);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -137,11 +136,6 @@ export function AdminPage() {
   const [studentForm, setStudentForm] = useState<StudentForm>(emptyStudentForm);
   const [baseForm, setBaseForm] = useState<LearningBaseForm>(emptyBaseForm);
   const [rotationForm, setRotationForm] = useState<RotationPlanForm>(emptyRotationForm);
-
-  const activeTerm = useMemo(
-    () => data.academicTerms.find((term) => term.active),
-    [data.academicTerms],
-  );
 
   const sortedTerms = useMemo(
     () =>
@@ -340,19 +334,6 @@ export function AdminPage() {
       {isLoading ? (
         <section className="placeholder-panel">
           <p>กำลังโหลดข้อมูล...</p>
-        </section>
-      ) : null}
-
-      {!isLoading && activeTab === "summary" ? (
-        <section className="placeholder-panel">
-          <p className="section-label">ภาพรวมการตั้งค่า</p>
-          <div className="summary-grid">
-            <SummaryCard label="จำนวนห้องเรียน" value={data.classrooms.filter((item) => item.active).length} />
-            <SummaryCard label="จำนวนนักเรียน" value={data.students.filter((item) => item.active).length} />
-            <SummaryCard label="จำนวนฐาน" value={data.bases.filter((item) => item.active).length} />
-            <SummaryCard label="จำนวนแผนเวียนฐาน" value={data.rotationPlans.filter((item) => item.active).length} />
-            <SummaryCard label="ปีการศึกษาปัจจุบัน" value={formatTermName(activeTerm)} />
-          </div>
         </section>
       ) : null}
 
@@ -779,16 +760,6 @@ export function AdminPage() {
     </RoleLayout>
   );
 }
-
-function SummaryCard({ label, value }: { label: string; value: string | number }) {
-  return (
-    <article className="summary-card">
-      <p>{label}</p>
-      <strong>{value}</strong>
-    </article>
-  );
-}
-
 function FormTitle({ title, onReset }: { title: string; onReset: () => void }) {
   return (
     <div className="form-title">

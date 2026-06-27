@@ -12,6 +12,9 @@ export function RoleLayout({
 }) {
   return (
     <main className={`page-shell role-shell ${tone}-shell`}>
+      <div className="role-banner" aria-hidden="true">
+        <img alt="" className="role-banner-image" src="/assets/school-banner.jpg" />
+      </div>
       <AppHeader title={title} />
       {children}
     </main>

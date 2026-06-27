@@ -1,8 +1,13 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { LoadingScreen } from "./components/LoadingScreen";
 import { ProtectedRoute } from "./components/ProtectedRoute";
-import { AdminPage } from "./pages/AdminPage";
 import { LoginPage } from "./pages/LoginPage";
-import { TeacherPage } from "./pages/TeacherPage";
+
+const AdminPage = lazy(() => import("./pages/AdminPage").then((module) => ({ default: module.AdminPage })));
+const TeacherPage = lazy(() =>
+  import("./pages/TeacherPage").then((module) => ({ default: module.TeacherPage })),
+);
 
 export default function App() {
   return (
@@ -12,7 +17,9 @@ export default function App() {
         path="/admin"
         element={
           <ProtectedRoute allowedRole="admin">
-            <AdminPage />
+            <Suspense fallback={<LoadingScreen />}>
+              <AdminPage />
+            </Suspense>
           </ProtectedRoute>
         }
       />
@@ -20,7 +27,9 @@ export default function App() {
         path="/teacher"
         element={
           <ProtectedRoute allowedRole="teacher">
-            <TeacherPage />
+            <Suspense fallback={<LoadingScreen />}>
+              <TeacherPage />
+            </Suspense>
           </ProtectedRoute>
         }
       />

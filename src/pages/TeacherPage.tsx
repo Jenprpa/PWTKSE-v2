@@ -53,7 +53,10 @@ export function TeacherPage() {
     try {
       const nextData = await fetchTeacherAttendanceData(authUser.uid);
       setData(nextData);
-      setSelectedRotationId(nextData.rotations[0]?.rotationId ?? "");
+      setSelectedRotationId((current) => {
+        const stillAvailable = nextData.rotations.some((rotation) => rotation.rotationId === current);
+        return stillAvailable ? current : nextData.rotations[0]?.rotationId ?? "";
+      });
     } catch {
       setError("ไม่สามารถโหลดข้อมูลเช็กชื่อได้");
     } finally {
@@ -175,7 +178,7 @@ export function TeacherPage() {
             <div className="error-message">ไม่พบแผนเวียนฐานสำหรับวันนี้</div>
           ) : null}
 
-          {data.activeTerm && data.rotations.length > 0 ? (
+          {data.activeTerm && data.rotations.length > 1 ? (
             <form className="admin-form">
               <label>
                 เลือกห้องเรียน
@@ -196,9 +199,13 @@ export function TeacherPage() {
           {selectedRotation ? (
             <section className="placeholder-panel">
               <p className="section-label">รายชื่อนักเรียน</p>
-              <p>
-                {selectedRotation.classroomName} / {selectedRotation.baseName}
-              </p>
+              <div className="teacher-rotation-card">
+                <p className="teacher-rotation-title">
+                  {selectedRotation.classroomName} / {selectedRotation.baseName}
+                </p>
+                <p>ครู: {selectedRotation.teacherName}</p>
+                <p>วันอังคาร คาบที่ {FIXED_COURSE_PERIOD}</p>
+              </div>
 
               {isLoadingStudents ? <p>กำลังโหลดรายชื่อนักเรียน...</p> : null}
               {!isLoadingStudents && students.length === 0 ? (

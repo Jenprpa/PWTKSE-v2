@@ -8,7 +8,7 @@ import {
   updateDoc,
   writeBatch,
 } from "firebase/firestore";
-import { db } from "../firebase";
+import { db } from "../firebaseDb";
 import type {
   AcademicTerm,
   AcademicTermForm,

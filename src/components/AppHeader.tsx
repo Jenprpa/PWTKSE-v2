@@ -1,5 +1,6 @@
 import { useAuth } from "../providers/AuthProvider";
 import { roleLabels } from "../types/user";
+import { SchoolBrand } from "./SchoolBrand";
 
 export function AppHeader({ title }: { title: string }) {
   const { logout, profile } = useAuth();
@@ -7,7 +8,7 @@ export function AppHeader({ title }: { title: string }) {
   return (
     <header className="app-header">
       <div>
-        <p className="eyebrow">PWTKSE v2</p>
+        <SchoolBrand compact />
         <h1>{title}</h1>
         {profile ? (
           <div className="user-summary">

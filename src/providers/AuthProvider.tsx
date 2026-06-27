@@ -4,7 +4,6 @@ import {
   signOut,
   type User,
 } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 import {
   createContext,
   useCallback,
@@ -14,7 +13,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import type { UserProfile, UserRole } from "../types/user";
 
 export type AuthStatus =
@@ -56,6 +55,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const loadProfile = useCallback(async (user: User) => {
     setStatus("loading-profile");
 
+    const { doc, getDoc } = await import("firebase/firestore");
+    const { db } = await import("../firebaseDb");
     const profileRef = doc(db, "users", user.uid);
     const profileSnap = await getDoc(profileRef);
 
