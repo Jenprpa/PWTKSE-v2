@@ -915,6 +915,258 @@ textarea:focus {
   border-bottom: 0;
 }
 
+.admin-entry-grid {
+  margin-bottom: 16px;
+}
+
+.report-entry-card {
+  display: grid;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.report-entry-card p {
+  margin: 0;
+}
+
+.report-banner {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(239, 247, 240, 0.96) 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+.report-banner .school-brand {
+  align-items: flex-start;
+}
+
+.report-banner-copy {
+  display: grid;
+  gap: 6px;
+}
+
+.report-banner-copy .intro {
+  margin: 0;
+  text-align: left;
+}
+
+.report-toolbar,
+.report-filters,
+.table-card,
+.chart-card {
+  margin-bottom: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-panel);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.report-toolbar,
+.report-filters {
+  padding: 16px;
+}
+
+.report-actions {
+  justify-content: flex-start;
+}
+
+.report-filter-grid {
+  display: grid;
+  gap: 14px;
+  margin: 14px 0;
+}
+
+.report-kpi-grid .kpi-detail {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  line-height: 1.4;
+}
+
+.report-chart-grid,
+.report-table-grid {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.chart-card,
+.table-card {
+  padding: 18px;
+}
+
+.chart-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.chart-head h2 {
+  margin-bottom: 4px;
+}
+
+.chart-head p {
+  margin: 0;
+  color: var(--text-soft);
+}
+
+.chart-canvas {
+  overflow-x: auto;
+}
+
+.chart-canvas svg {
+  display: block;
+  width: 100%;
+  min-width: 620px;
+}
+
+.chart-axis {
+  stroke: #bdd0c6;
+  stroke-width: 1.5;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--primary);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart-value,
+.chart-label {
+  fill: var(--text-soft);
+  font-size: 12px;
+  font-family: "Anuphan", ui-sans-serif, system-ui, sans-serif;
+}
+
+.pie-wrap {
+  display: grid;
+  gap: 16px;
+}
+
+.pie-chart {
+  width: 220px;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  border-radius: 50%;
+  padding: 16px;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
+}
+
+.pie-center {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  text-align: center;
+}
+
+.pie-center strong {
+  font-size: 1.4rem;
+  font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
+}
+
+.pie-center span {
+  color: var(--text-soft);
+}
+
+.chart-legend {
+  display: grid;
+  gap: 12px;
+}
+
+.legend-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.legend-item p {
+  margin: 2px 0 0;
+  color: var(--text-soft);
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.heatmap-scroll {
+  overflow-x: auto;
+}
+
+.heatmap-grid {
+  display: grid;
+  gap: 8px;
+  min-width: 100%;
+}
+
+.heatmap-head,
+.heatmap-row-label,
+.heatmap-cell {
+  padding: 12px 10px;
+  border-radius: 14px;
+  background: #f4f8f4;
+  text-align: center;
+}
+
+.heatmap-head,
+.heatmap-row-label {
+  font-weight: 600;
+}
+
+.heatmap-sticky {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+}
+
+.heatmap-row-label {
+  background: #f1f7f1;
+}
+
+.heatmap-cell {
+  display: grid;
+  gap: 4px;
+  background: rgba(43, 128, 117, 0.12);
+  color: var(--text);
+}
+
+.heatmap-cell strong {
+  font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
+}
+
+.heatmap-cell span {
+  color: var(--text-soft);
+  font-size: 0.82rem;
+}
+
+.report-table {
+  min-width: 720px;
+}
+
+.report-loading {
+  margin-bottom: 16px;
+}
+
+.no-print {
+  display: block;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -990,6 +1242,23 @@ textarea:focus {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .report-banner {
+    grid-template-columns: 1fr 1.2fr;
+    align-items: center;
+  }
+
+  .report-filter-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .report-chart-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .report-table-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .teacher-menu-grid {
     max-width: 680px;
   }
@@ -1014,5 +1283,48 @@ textarea:focus {
 
   .status-options {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  .no-print,
+  .app-header,
+  .admin-tabs,
+  .menu-grid,
+  .admin-entry-grid,
+  .fixed-rule-panel {
+    display: none !important;
+  }
+
+  .page-shell {
+    width: 100%;
+    min-height: auto;
+    padding: 0;
+  }
+
+  .report-banner,
+  .report-toolbar,
+  .report-filters,
+  .chart-card,
+  .table-card,
+  .kpi-card,
+  .empty-state {
+    box-shadow: none;
+  }
+
+  .chart-card,
+  .table-card,
+  .report-banner {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
   }
 }

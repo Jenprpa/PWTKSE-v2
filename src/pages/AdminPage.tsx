@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import { RoleLayout } from "../components/RoleLayout";
 import {
   deactivateRecord,
@@ -318,6 +319,13 @@ export function AdminPage() {
         <p>
           วิชานี้เรียนเฉพาะ {FIXED_COURSE_DAY_TH} คาบที่ {FIXED_COURSE_PERIOD}
         </p>
+      </section>
+
+      <section className="menu-grid admin-entry-grid" aria-label="report shortcuts">
+        <Link className="menu-card report-entry-card" to="/reports">
+          <h2>รายงานและสถิติ</h2>
+          <p>ดู KPI, กราฟ, heatmap, และส่งออก PDF / Excel</p>
+        </Link>
       </section>
 
       <section className="kpi-grid" aria-label="ภาพรวม">
