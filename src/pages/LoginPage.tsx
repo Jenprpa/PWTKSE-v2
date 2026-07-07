@@ -41,11 +41,9 @@ export function LoginPage() {
       <section className="login-shell-inner" aria-labelledby="login-title">
         <div className="login-banner">
           <img alt="แบนเนอร์โรงเรียน" className="login-banner-image" src="/assets/school-banner.jpg" />
-          <div className="login-banner-overlay">
-            <SchoolBrand />
-          </div>
         </div>
         <section className="login-panel" aria-labelledby="login-title">
+          <SchoolBrand />
           <h1 id="login-title">เข้าสู่ระบบ</h1>
           <p className="intro">สำหรับผู้ดูแลระบบและครูผู้สอน</p>
 
