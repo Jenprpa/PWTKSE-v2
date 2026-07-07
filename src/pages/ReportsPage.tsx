@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, Fragment, useEffect, useMemo, useState } from "react";
 import { RoleLayout } from "../components/RoleLayout";
 import { SchoolBrand } from "../components/SchoolBrand";
 import {
@@ -11,11 +11,11 @@ import {
   type ReportSourceData,
 } from "../services/reportData";
 import { type AttendanceStatus } from "../types/rotation";
-import { Fragment } from "react";
 
 const defaultFilters: ReportFilters = {
   search: "",
   academicTermId: "",
+  weekNumber: "",
   classroomId: "",
   baseId: "",
   teacherUid: "",
@@ -62,6 +62,15 @@ function getReadableCount(value: number) {
   return Intl.NumberFormat("th-TH").format(value);
 }
 
+function ChartEmptyState() {
+  return (
+    <div className="empty-state report-empty-state">
+      <h2>ยังไม่มีข้อมูลสำหรับกราฟนี้</h2>
+      <p>ลองเปลี่ยนตัวกรอง หรือรอให้มีรายการเช็กชื่อที่ส่งแล้ว</p>
+    </div>
+  );
+}
+
 function StatBarChart({
   title,
   subtitle,
@@ -87,7 +96,7 @@ function StatBarChart({
           <p>{subtitle}</p>
         </div>
       </div>
-      <div className="chart-canvas">
+      {items.length === 0 ? <ChartEmptyState /> : <div className="chart-canvas">
         <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title}>
           <line x1={padding.left} y1={padding.top + chartHeight} x2={width - padding.right} y2={padding.top + chartHeight} className="chart-axis" />
           {items.map((item, index) => {
@@ -116,7 +125,7 @@ function StatBarChart({
             );
           })}
         </svg>
-      </div>
+      </div>}
     </article>
   );
 }
@@ -153,7 +162,7 @@ function StatLineChart({
           <p>{subtitle}</p>
         </div>
       </div>
-      <div className="chart-canvas">
+      {items.length === 0 ? <ChartEmptyState /> : <div className="chart-canvas">
         <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-label={title}>
           <line x1={padding.left} y1={padding.top + chartHeight} x2={width - padding.right} y2={padding.top + chartHeight} className="chart-axis" />
           <polyline points={points} className="chart-line" />
@@ -170,7 +179,7 @@ function StatLineChart({
             );
           })}
         </svg>
-      </div>
+      </div>}
     </article>
   );
 }
@@ -201,7 +210,7 @@ function StatusPieChart({
           <p>{subtitle}</p>
         </div>
       </div>
-      <div className="pie-wrap">
+      {total === 0 ? <ChartEmptyState /> : <div className="pie-wrap">
         <div
           className="pie-chart"
           style={{
@@ -228,7 +237,7 @@ function StatusPieChart({
             </div>
           ))}
         </div>
-      </div>
+      </div>}
     </article>
   );
 }
@@ -258,7 +267,7 @@ function HeatmapGrid({
           <p>{subtitle}</p>
         </div>
       </div>
-      <div className="heatmap-scroll">
+      {rows.length === 0 || weeks.length === 0 ? <ChartEmptyState /> : <div className="heatmap-scroll">
         <div className="heatmap-grid" style={{ gridTemplateColumns: `160px repeat(${weeks.length}, minmax(72px, 1fr))` }}>
           <div className="heatmap-head heatmap-sticky">ห้องเรียน</div>
           {weeks.map((weekNumber) => (
@@ -292,7 +301,7 @@ function HeatmapGrid({
             );
           })}
         </div>
-      </div>
+      </div>}
     </article>
   );
 }
@@ -354,6 +363,7 @@ export function ReportsPage() {
   const [filters, setFilters] = useState<ReportFilters>(defaultFilters);
   const [selectedStudentId, setSelectedStudentId] = useState("");
   const [isExporting, setIsExporting] = useState(false);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     async function load() {
@@ -372,7 +382,7 @@ export function ReportsPage() {
     }
 
     void load();
-  }, []);
+  }, [reloadKey]);
 
   const model = useMemo(
     () => (source ? buildReportModel(source, filters, selectedStudentId) : null),
@@ -400,7 +410,7 @@ export function ReportsPage() {
     try {
       const workbook = buildExcelWorkbook(model);
       downloadBlob(
-        new Blob([workbook], { type: "application/vnd.ms-excel;charset=utf-8" }),
+        new Blob(["\ufeff", workbook], { type: "application/vnd.ms-excel;charset=utf-8" }),
         `PWTKSE-v2-reports-${new Date().toISOString().slice(0, 10)}.xls`,
       );
     } finally {
@@ -433,8 +443,11 @@ export function ReportsPage() {
       </form>
 
       {error ? (
-        <div className="error-message" role="alert">
-          {error}
+        <div className="error-message report-error" role="alert">
+          <span>{error} กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง</span>
+          <button className="secondary-button compact-button" type="button" onClick={() => setReloadKey((current) => current + 1)}>
+            ลองใหม่
+          </button>
         </div>
       ) : null}
 
@@ -461,9 +474,20 @@ export function ReportsPage() {
                 ปีการศึกษา
                 <select value={filters.academicTermId} onChange={(event) => updateFilters({ academicTermId: event.target.value })}>
                   <option value="">ทั้งหมด</option>
-                  {source?.academicTerms.map((term) => (
-                    <option key={term.academicTermId} value={term.academicTermId}>
-                      {term.name}
+                  {model.filterOptions.academicTerms.map((term) => (
+                    <option key={term.value} value={term.value}>
+                      {term.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                สัปดาห์
+                <select value={filters.weekNumber} onChange={(event) => updateFilters({ weekNumber: event.target.value })}>
+                  <option value="">ทั้งหมด</option>
+                  {model.filterOptions.weeks.map((weekNumber) => (
+                    <option key={weekNumber} value={weekNumber}>
+                      สัปดาห์ที่ {weekNumber}
                     </option>
                   ))}
                 </select>
@@ -472,9 +496,9 @@ export function ReportsPage() {
                 ห้องเรียน
                 <select value={filters.classroomId} onChange={(event) => updateFilters({ classroomId: event.target.value })}>
                   <option value="">ทั้งหมด</option>
-                  {source?.classrooms.map((classroom) => (
-                    <option key={classroom.classroomId} value={classroom.classroomId}>
-                      {classroom.displayName}
+                  {model.filterOptions.classrooms.map((classroom) => (
+                    <option key={classroom.value} value={classroom.value}>
+                      {classroom.label}
                     </option>
                   ))}
                 </select>
@@ -483,9 +507,9 @@ export function ReportsPage() {
                 ฐาน
                 <select value={filters.baseId} onChange={(event) => updateFilters({ baseId: event.target.value })}>
                   <option value="">ทั้งหมด</option>
-                  {source?.bases.map((base) => (
-                    <option key={base.baseId} value={base.baseId}>
-                      {base.baseName}
+                  {model.filterOptions.bases.map((base) => (
+                    <option key={base.value} value={base.value}>
+                      {base.label}
                     </option>
                   ))}
                 </select>
@@ -494,13 +518,11 @@ export function ReportsPage() {
                 ครู
                 <select value={filters.teacherUid} onChange={(event) => updateFilters({ teacherUid: event.target.value })}>
                   <option value="">ทั้งหมด</option>
-                  {source?.bases
-                    .filter((base, index, array) => array.findIndex((item) => item.teacherUid === base.teacherUid) === index)
-                    .map((base) => (
-                      <option key={base.teacherUid} value={base.teacherUid}>
-                        {base.teacherName}
-                      </option>
-                    ))}
+                  {model.filterOptions.teachers.map((teacher) => (
+                    <option key={teacher.value} value={teacher.value}>
+                      {teacher.label}
+                    </option>
+                  ))}
                 </select>
               </label>
               <label>
@@ -524,6 +546,21 @@ export function ReportsPage() {
               </select>
             </label>
           </section>
+
+          {model.warnings.length > 0 ? (
+            <section className="report-warning-list" aria-label="คำเตือนข้อมูลรายงาน">
+              {model.warnings.map((warning) => (
+                <p key={warning}>{warning}</p>
+              ))}
+            </section>
+          ) : null}
+
+          {model.filteredSessions.length === 0 ? (
+            <section className="empty-state report-main-empty" aria-live="polite">
+              <h2>ไม่พบข้อมูลรายงาน</h2>
+              <p>ยังไม่มีรายการเช็กชื่อที่ส่งแล้วตรงกับตัวกรองที่เลือก</p>
+            </section>
+          ) : null}
 
           <section className="kpi-grid report-kpi-grid" aria-label="ภาพรวมรายงาน">
             {model.kpis.map((item) => (
@@ -573,7 +610,7 @@ export function ReportsPage() {
             title="Attendance Heatmap"
             subtitle="อัตรามาเรียนตามห้องและสัปดาห์"
             rows={model.classroomStats.map((item) => item.label)}
-            weeks={Array.from(new Set(model.weeklyStats.map((item) => item.weekNumber)))}
+            weeks={model.heatmapWeeks}
             cells={model.heatmap}
           />
 

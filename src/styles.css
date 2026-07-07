@@ -1163,6 +1163,44 @@ textarea:focus {
   margin-bottom: 16px;
 }
 
+.report-empty-state {
+  min-height: 210px;
+  display: grid;
+  align-content: center;
+  box-shadow: none;
+}
+
+.report-main-empty,
+.report-warning-list {
+  margin-bottom: 16px;
+}
+
+.report-warning-list {
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid #e5d7ad;
+  border-radius: var(--radius-panel);
+  background: #fffaf0;
+  color: #665529;
+}
+
+.report-warning-list p {
+  margin: 0;
+}
+
+.report-error {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.report-error .compact-button {
+  flex: 0 0 auto;
+}
+
 .no-print {
   display: block;
 }
@@ -1217,6 +1255,28 @@ textarea:focus {
   .login-panel {
     padding: 24px 18px 22px;
     border-radius: 22px;
+  }
+
+  .report-banner,
+  .report-toolbar,
+  .report-filters,
+  .chart-card,
+  .table-card {
+    padding: 14px;
+  }
+
+  .report-actions,
+  .report-error {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .report-error .compact-button {
+    width: 100%;
+  }
+
+  .pie-chart {
+    width: min(200px, 72vw);
   }
 
   .compact-button {
@@ -1321,6 +1381,45 @@ textarea:focus {
   .report-banner {
     break-inside: avoid;
     page-break-inside: avoid;
+  }
+
+  .report-chart-grid,
+  .report-table-grid {
+    display: block;
+  }
+
+  .chart-card,
+  .table-card,
+  .report-banner,
+  .kpi-card {
+    margin-bottom: 8mm;
+  }
+
+  .chart-canvas,
+  .table-scroll,
+  .heatmap-scroll {
+    overflow: visible;
+  }
+
+  .chart-canvas svg,
+  .report-table {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .report-table {
+    table-layout: fixed;
+    font-size: 9pt;
+  }
+
+  .report-table th,
+  .report-table td {
+    padding: 5px;
+    overflow-wrap: anywhere;
+  }
+
+  .heatmap-grid {
+    font-size: 8pt;
   }
 
   @page {

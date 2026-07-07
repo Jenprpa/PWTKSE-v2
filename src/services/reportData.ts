@@ -19,6 +19,7 @@ export type ReportSourceData = AdminData & {
 export type ReportFilters = {
   search: string;
   academicTermId: string;
+  weekNumber: string;
   classroomId: string;
   baseId: string;
   teacherUid: string;
@@ -74,6 +75,14 @@ export type ReportModel = {
   search: string;
   activeStudents: Student[];
   selectedStudent: Student | null;
+  filterOptions: {
+    academicTerms: Array<{ value: string; label: string }>;
+    weeks: number[];
+    classrooms: Array<{ value: string; label: string }>;
+    bases: Array<{ value: string; label: string }>;
+    teachers: Array<{ value: string; label: string }>;
+  };
+  warnings: string[];
   filteredSessions: AttendanceSession[];
   filteredRecords: AttendanceRecord[];
   kpis: Array<{ label: string; value: string; detail: string }>;
@@ -83,6 +92,7 @@ export type ReportModel = {
   classroomStats: ReportCategoryStat[];
   baseStats: ReportCategoryStat[];
   teacherStats: ReportCategoryStat[];
+  heatmapWeeks: number[];
   heatmap: ReportHeatmapCell[];
   studentHistory: StudentHistoryRow[];
   dateRangeLabel: string;
@@ -126,6 +136,23 @@ function groupBy<T>(items: T[], getKey: (item: T) => string) {
   }
 
   return map;
+}
+
+function mergeOptions(
+  primary: Array<{ value: string; label: string }>,
+  fallback: Array<{ value: string; label: string }>,
+) {
+  const options = new Map<string, string>();
+
+  for (const option of [...primary, ...fallback]) {
+    if (option.value && !options.has(option.value)) {
+      options.set(option.value, option.label || option.value);
+    }
+  }
+
+  return [...options.entries()]
+    .map(([value, label]) => ({ value, label }))
+    .sort((a, b) => a.label.localeCompare(b.label, "th-TH", { numeric: true }));
 }
 
 function buildCategoryStat(
@@ -198,7 +225,10 @@ export function buildReportModel(
   filters: ReportFilters,
   selectedStudentId: string,
 ): ReportModel {
-  const activeTerm = source.academicTerms.find((term) => term.active) ?? null;
+  const activeTerm =
+    source.academicTerms.find((term) => term.academicTermId === filters.academicTermId) ??
+    source.academicTerms.find((term) => term.active) ??
+    null;
   const search = normalize(filters.search);
   const activeStudents = [...source.students]
     .filter((student) => student.active)
@@ -208,11 +238,43 @@ export function buildReportModel(
     });
 
   const submittedSessions = source.attendanceSessions.filter((session) => session.status === "submitted");
+  const filterOptions = {
+    academicTerms: mergeOptions(
+      source.academicTerms.map((term) => ({ value: term.academicTermId, label: term.name })),
+      submittedSessions.map((session) => ({
+        value: session.academicTermId,
+        label: `รหัสภาคเรียน ${session.academicTermId}`,
+      })),
+    ),
+    weeks: [...new Set(submittedSessions.map((session) => session.weekNumber))].sort((a, b) => a - b),
+    classrooms: mergeOptions(
+      source.classrooms.map((classroom) => ({ value: classroom.classroomId, label: classroom.displayName })),
+      submittedSessions.map((session) => ({ value: session.classroomId, label: session.classroomName })),
+    ),
+    bases: mergeOptions(
+      source.bases.map((base) => ({ value: base.baseId, label: base.baseName })),
+      submittedSessions.map((session) => ({ value: session.baseId, label: session.baseName })),
+    ),
+    teachers: mergeOptions(
+      source.bases.map((base) => ({ value: base.teacherUid, label: base.teacherName })),
+      submittedSessions.map((session) => ({ value: session.teacherUid, label: session.teacherName })),
+    ),
+  };
+  const warnings = [
+    source.academicTerms.length === 0 ? "ยังไม่มีข้อมูลภาคเรียน ระบบจะแสดงรายงานจากรายการเช็กชื่อที่มีอยู่" : "",
+    source.classrooms.length === 0 ? "ไม่พบข้อมูลห้องเรียนหลัก ระบบใช้ชื่อห้องจากรายการเช็กชื่อแทน" : "",
+    source.bases.length === 0 ? "ไม่พบข้อมูลฐานการเรียนรู้หลัก ระบบใช้ชื่อฐานจากรายการเช็กชื่อแทน" : "",
+    source.students.length === 0 ? "ยังไม่มีข้อมูลนักเรียน จึงไม่สามารถแสดงประวัติรายบุคคลได้" : "",
+  ].filter(Boolean);
   const allRecordsBySessionId = groupBy(source.attendanceRecords, (record) => record.sessionId);
   const sessionLookup = new Map(submittedSessions.map((session) => [session.sessionId, session] as const));
 
   const filteredSessions = submittedSessions.filter((session) => {
     if (filters.academicTermId && session.academicTermId !== filters.academicTermId) {
+      return false;
+    }
+
+    if (filters.weekNumber && session.weekNumber !== Number(filters.weekNumber)) {
       return false;
     }
 
@@ -343,7 +405,13 @@ export function buildReportModel(
     })
     .sort((a, b) => a.classroomName.localeCompare(b.classroomName, "th-TH", { numeric: true }));
 
-  const heatmapWeeks = [...weeklyGroups.keys()].map(Number).sort((a, b) => a - b);
+  const observedWeeks = [...weeklyGroups.keys()].map(Number).sort((a, b) => a - b);
+  const heatmapWeeks = observedWeeks.length
+    ? Array.from(
+        { length: observedWeeks[observedWeeks.length - 1] - observedWeeks[0] + 1 },
+        (_, index) => observedWeeks[0] + index,
+      )
+    : [];
   const heatmap = heatmapClassrooms.flatMap((classroom) =>
     heatmapWeeks.map((weekNumber) => {
       const sessions = classroom.sessions.filter((session) => session.weekNumber === weekNumber);
@@ -388,6 +456,8 @@ export function buildReportModel(
     search,
     activeStudents,
     selectedStudent,
+    filterOptions,
+    warnings,
     filteredSessions,
     filteredRecords,
     kpis: [
@@ -418,6 +488,7 @@ export function buildReportModel(
     classroomStats,
     baseStats,
     teacherStats,
+    heatmapWeeks,
     heatmap,
     studentHistory,
     dateRangeLabel:
@@ -437,19 +508,29 @@ function escapeXml(value: string | number | null | undefined) {
 }
 
 function buildWorksheet(name: string, rows: Array<Array<string | number>>) {
+  const columnCount = Math.max(0, ...rows.map((row) => row.length));
+  const columns = Array.from({ length: columnCount }, (_, columnIndex) => {
+    const longestValue = Math.max(
+      8,
+      ...rows.map((row) => String(row[columnIndex] ?? "").length),
+    );
+    const width = Math.min(220, Math.max(72, longestValue * 8 + 20));
+    return `<Column ss:AutoFitWidth="0" ss:Width="${width}"/>`;
+  }).join("");
   const rowXml = rows
     .map(
-      (row) =>
+      (row, rowIndex) =>
         `<Row>${row
           .map((cell) => {
             const type = typeof cell === "number" ? "Number" : "String";
-            return `<Cell><Data ss:Type="${type}">${escapeXml(cell)}</Data></Cell>`;
+            const style = rowIndex === 0 ? ' ss:StyleID="Header"' : "";
+            return `<Cell${style}><Data ss:Type="${type}">${escapeXml(cell)}</Data></Cell>`;
           })
           .join("")}</Row>`,
     )
     .join("");
 
-  return `<Worksheet ss:Name="${escapeXml(name)}"><Table>${rowXml}</Table></Worksheet>`;
+  return `<Worksheet ss:Name="${escapeXml(name)}"><Table>${columns}${rowXml}</Table></Worksheet>`;
 }
 
 export function buildExcelWorkbook(model: ReportModel) {
@@ -512,6 +593,7 @@ export function buildExcelWorkbook(model: ReportModel) {
     ' xmlns:o="urn:schemas-microsoft-com:office:office"',
     ' xmlns:x="urn:schemas-microsoft-com:office:excel"',
     ' xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">',
+    '<Styles><Style ss:ID="Header"><Font ss:Bold="1"/><Interior ss:Color="#EAF3EB" ss:Pattern="Solid"/></Style></Styles>',
     buildWorksheet("Summary", summaryRows),
     buildWorksheet("Status", statusRows),
     buildWorksheet("Day", dayRows),
