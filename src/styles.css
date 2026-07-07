@@ -1,9 +1,41 @@
 @import url("https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Kanit:wght@500;600;700&display=swap");
 
 :root {
-  color: #18212f;
-  background:
-    linear-gradient(180deg, #f8fcf8 0%, #eef7ef 42%, #f6f9fb 100%);
+  --bg: #f8fbf7;
+  --bg-soft: #eef6ef;
+  --surface: rgba(255, 255, 255, 0.94);
+  --surface-strong: #ffffff;
+  --text: #18212f;
+  --text-soft: #607083;
+  --muted: #8b98a8;
+  --line: #d7e0ea;
+  --line-soft: #e7edf3;
+  --primary: #2b8075;
+  --primary-strong: #23685f;
+  --primary-soft: #e7f3ee;
+  --success: #1d6b42;
+  --success-soft: #edf8f1;
+  --danger: #8c3d3d;
+  --danger-soft: #fff4f4;
+  --warning-soft: #fff8e9;
+  --radius-card: 18px;
+  --radius-panel: 24px;
+  --radius-input: 16px;
+  --radius-pill: 999px;
+  --shadow-sm: 0 8px 18px rgba(28, 42, 59, 0.05);
+  --shadow-md: 0 14px 30px rgba(31, 48, 35, 0.08);
+  --shadow-lg: 0 18px 34px rgba(31, 48, 35, 0.1);
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 28px;
+  --space-8: 32px;
+
+  color: var(--text);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 42%, #f6f9fb 100%);
   font-family:
     "Anuphan", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
@@ -27,8 +59,7 @@ body {
     sans-serif;
   line-height: 1.55;
   font-weight: 400;
-  background:
-    linear-gradient(180deg, rgba(247, 251, 246, 0.92) 0%, rgba(242, 248, 244, 0.96) 38%, #f8fafc 100%);
+  background: linear-gradient(180deg, rgba(247, 251, 246, 0.92) 0%, rgba(242, 248, 244, 0.96) 38%, #f8fafc 100%);
 }
 
 button,
@@ -46,11 +77,22 @@ button,
   letter-spacing: 0;
 }
 
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
 .page-shell {
   width: min(100%, 960px);
   min-height: 100vh;
   margin: 0 auto;
-  padding: 24px 16px;
+  padding: var(--space-6) var(--space-4);
+}
+
+.page-shell.login-shell {
+  width: min(100%, 1360px);
 }
 
 .center-shell,
@@ -59,44 +101,102 @@ button,
   place-items: center;
 }
 
+.login-shell {
+  place-items: start center;
+  padding-top: 20px;
+}
+
 .login-shell-inner {
   width: 100%;
   display: grid;
-  gap: 16px;
+  gap: var(--space-5);
+  position: relative;
+  padding: 8px 0 24px;
+}
+
+.login-shell-inner::before,
+.login-shell-inner::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.42;
+}
+
+.login-shell-inner::before {
+  left: -36px;
+  top: 26%;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(201, 223, 196, 0.36) 0 36%, transparent 38%),
+    radial-gradient(circle at 50% 50%, rgba(194, 222, 190, 0.24) 0 60%, transparent 62%);
+  filter: blur(2px);
+}
+
+.login-shell-inner::after {
+  right: -44px;
+  bottom: 8%;
+  width: 250px;
+  height: 220px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(202, 224, 193, 0.24) 0 40%, transparent 42%),
+    radial-gradient(circle at 50% 50%, rgba(204, 229, 190, 0.18) 0 66%, transparent 68%);
+  filter: blur(1px);
 }
 
 .login-panel,
 .status-card,
 .placeholder-panel,
-.menu-card {
-  width: 100%;
-  border: 1px solid #d7e0ea;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 18px 40px rgba(28, 42, 59, 0.08);
+.menu-card,
+.admin-form,
+.record-card,
+.summary-card,
+.attendance-card,
+.kpi-card,
+.fixed-rule-panel,
+.teacher-rotation-card,
+.empty-state,
+.app-header,
+.login-banner,
+.role-banner,
+.data-table {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .login-panel {
-  max-width: 440px;
-  padding: 24px 20px 26px;
-  border-radius: 22px;
-  border-color: rgba(195, 211, 201, 0.92);
-  box-shadow: 0 14px 30px rgba(31, 48, 35, 0.08);
+  max-width: 500px;
+  padding: var(--space-7) var(--space-6) var(--space-6);
+  border-radius: var(--radius-panel);
+  border-color: rgba(198, 214, 205, 0.94);
+  box-shadow:
+    var(--shadow-lg),
+    0 2px 0 rgba(255, 255, 255, 0.85) inset;
+  position: relative;
+  z-index: 1;
 }
 
 .login-banner,
 .role-banner {
   width: 100%;
   overflow: hidden;
-  border: 1px solid #d7e0ea;
-  border-radius: 22px;
-  background: #ffffff;
-  box-shadow: 0 14px 30px rgba(31, 48, 35, 0.08);
+  background: var(--surface-strong);
+  box-shadow: var(--shadow-md);
 }
 
 .login-banner {
   position: relative;
-  aspect-ratio: 16 / 10;
+  aspect-ratio: 16 / 4.45;
+  border-radius: var(--radius-panel);
+}
+
+.role-banner {
+  margin-bottom: 14px;
+  aspect-ratio: 16 / 4.65;
 }
 
 .login-banner-image,
@@ -122,8 +222,8 @@ button,
   height: 68px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid #d7e0ea;
-  background: #ffffff;
+  border: 1px solid var(--line);
+  background: var(--surface-strong);
   flex: 0 0 auto;
 }
 
@@ -154,29 +254,41 @@ button,
   line-height: 1.45;
 }
 
+.login-mark {
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 10px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-pill);
+  color: var(--primary-strong);
+  background: var(--primary-soft);
+  box-shadow: 0 6px 16px rgba(63, 125, 67, 0.12);
+}
+
+.login-mark svg {
+  width: 28px;
+  height: 28px;
+}
+
 .eyebrow {
   margin: 0 0 8px;
-  color: #28665d;
+  color: var(--primary);
   font-size: 0.88rem;
   font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   line-height: 1.25;
 }
 
-h1,
-h2,
-p {
-  overflow-wrap: anywhere;
-}
-
 h1 {
   margin: 0;
-  color: #18212f;
+  color: var(--text);
   font-size: clamp(1.75rem, 8vw, 2.35rem);
   font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: 0;
+  text-align: left;
 }
 
 h2 {
@@ -192,18 +304,26 @@ h2 {
 .muted,
 .placeholder-panel p,
 .menu-card p,
-.status-card p {
-  color: #607083;
+.status-card p,
+.teacher-rotation-card p,
+.empty-state p,
+.kpi-label {
+  color: var(--text-soft);
   line-height: 1.55;
 }
 
 .intro {
-  margin: 12px 0 24px;
+  margin: 12px 0 8px;
+  text-align: center;
+}
+
+.login-panel h1 {
+  text-align: center;
 }
 
 .login-form {
   display: grid;
-  gap: 20px;
+  gap: 18px;
   margin-top: 18px;
 }
 
@@ -215,28 +335,24 @@ label {
   line-height: 1.45;
 }
 
-input {
-  width: 100%;
-  min-height: 54px;
-  border: 1px solid #bfccd8;
-  border-radius: 8px;
-  padding: 0 15px;
-  color: #18212f;
-  background: #ffffff;
-}
-
+input,
 select,
 textarea {
   width: 100%;
-  border: 1px solid #bfccd8;
-  border-radius: 8px;
-  padding: 0 14px;
-  color: #18212f;
-  background: #ffffff;
+  border: 1px solid #c5d1dc;
+  border-radius: var(--radius-input);
+  padding: 0 16px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+
+input {
+  min-height: 56px;
 }
 
 select {
-  min-height: 54px;
+  min-height: 56px;
 }
 
 textarea {
@@ -248,25 +364,49 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus {
-  border-color: #2b8075;
+  border-color: var(--primary);
   outline: 3px solid rgba(43, 128, 117, 0.16);
 }
 
 .primary-button,
 .secondary-button,
-.danger-button {
-  min-height: 54px;
+.danger-button,
+.tab-button {
+  min-height: 56px;
   border: 0;
-  border-radius: 16px;
+  border-radius: var(--radius-input);
   padding: 0 18px;
   font-weight: 600;
   line-height: 1.2;
   cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    opacity 180ms ease;
 }
 
 .primary-button {
   color: #ffffff;
-  background: #2b8075;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+  box-shadow: 0 10px 22px rgba(43, 128, 117, 0.2);
+}
+
+.primary-button:hover:not(:disabled),
+.secondary-button:hover:not(:disabled),
+.danger-button:hover:not(:disabled),
+.tab-button:hover:not(.is-selected),
+.text-button:hover {
+  transform: translateY(-1px);
+}
+
+.primary-button:active:not(:disabled),
+.secondary-button:active:not(:disabled),
+.danger-button:active:not(:disabled),
+.tab-button:active,
+.text-button:active {
+  transform: translateY(0);
 }
 
 .primary-button:disabled {
@@ -280,7 +420,7 @@ textarea:focus {
 }
 
 .danger-button {
-  color: #8a1f1f;
+  color: var(--danger);
   background: #ffe8e8;
 }
 
@@ -294,12 +434,13 @@ textarea:focus {
   display: inline-grid;
   min-height: 44px;
   align-items: center;
-  border-radius: 8px;
+  border-radius: var(--radius-input);
   padding: 0 16px;
   color: #ffffff;
-  background: #2b8075;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
   font-weight: 600;
   text-decoration: none;
+  box-shadow: 0 10px 22px rgba(43, 128, 117, 0.16);
 }
 
 .compact-button {
@@ -308,20 +449,20 @@ textarea:focus {
 }
 
 .error-message {
-  border: 1px solid #e4cfcf;
-  border-radius: 14px;
-  padding: 13px 14px;
-  color: #8c3d3d;
-  background: #fff7f7;
+  border: 1px solid #e7d7d7;
+  border-radius: var(--radius-input);
+  padding: 14px 14px;
+  color: var(--danger);
+  background: var(--danger-soft);
   font-weight: 600;
 }
 
 .success-message {
-  border: 1px solid #a7d9bf;
-  border-radius: 8px;
+  border: 1px solid #bfdcc8;
+  border-radius: var(--radius-input);
   padding: 12px 14px;
-  color: #1d6b42;
-  background: #effaf3;
+  color: var(--success);
+  background: var(--success-soft);
   font-weight: 600;
 }
 
@@ -340,7 +481,7 @@ textarea:focus {
 
 .error-title {
   margin: 0;
-  color: #8a1f1f;
+  color: var(--danger);
   font-size: 1.2rem;
   font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
@@ -358,32 +499,39 @@ textarea:focus {
   width: 42px;
   height: 42px;
   border: 4px solid #dce6ef;
-  border-top-color: #2b8075;
+  border-top-color: var(--primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 
 .app-header {
   display: flex;
-  gap: 16px;
+  gap: 18px;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 20px;
-  padding: 20px;
-  border: 1px solid #d7e0ea;
-  border-radius: 8px;
-  background: #ffffff;
+  margin-bottom: 18px;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(6px);
 }
 
 .app-header .muted {
   margin: 8px 0 0;
 }
 
+.app-header h1 {
+  margin-top: 8px;
+  font-size: clamp(1.55rem, 4vw, 1.95rem);
+}
+
 .user-summary {
   display: grid;
   gap: 4px;
   margin-top: 12px;
-  color: #607083;
+  color: var(--text-soft);
 }
 
 .user-summary p {
@@ -394,26 +542,21 @@ textarea:focus {
   max-width: 1040px;
 }
 
-.role-banner {
-  margin-bottom: 14px;
-  aspect-ratio: 16 / 4;
-}
-
 .teacher-rotation-card {
   display: grid;
   gap: 4px;
   margin-top: 12px;
-  border: 1px solid #d7e0ea;
-  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
   padding: 14px;
-  background: #f8fbfd;
+  background: rgba(248, 251, 253, 0.92);
 }
 
 .teacher-rotation-title {
   margin: 0;
   color: #13222e;
   font-size: 1.1rem;
-  font-weight: 900;
+  font-weight: 600;
 }
 
 .admin-shell .app-header {
@@ -421,11 +564,11 @@ textarea:focus {
 }
 
 .teacher-shell .app-header {
-  border-top: 4px solid #2b8075;
+  border-top: 4px solid var(--primary);
 }
 
 .placeholder-panel {
-  padding: 24px 20px;
+  padding: 22px 18px;
 }
 
 .placeholder-panel p {
@@ -458,10 +601,10 @@ textarea:focus {
 
 .fixed-rule-panel {
   margin-bottom: 16px;
-  border: 1px solid #bfd8e5;
-  border-radius: 8px;
+  border: 1px solid #d7e6dc;
+  border-radius: var(--radius-card);
   padding: 18px;
-  background: #f5fbff;
+  background: rgba(245, 251, 247, 0.96);
 }
 
 .fixed-rule-panel p {
@@ -478,8 +621,8 @@ textarea:focus {
 
 .tab-button {
   min-height: 46px;
-  border: 1px solid #cdd8e4;
-  border-radius: 8px;
+  border: 1px solid #cfd8e2;
+  border-radius: var(--radius-input);
   padding: 0 14px;
   color: #29384a;
   background: #ffffff;
@@ -489,9 +632,10 @@ textarea:focus {
 }
 
 .tab-button.is-selected {
-  border-color: #2b8075;
+  border-color: var(--primary);
   color: #ffffff;
-  background: #2b8075;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+  box-shadow: 0 8px 16px rgba(43, 128, 117, 0.15);
 }
 
 .admin-message {
@@ -507,10 +651,10 @@ textarea:focus {
 .record-card,
 .summary-card {
   width: 100%;
-  border: 1px solid #d7e0ea;
-  border-radius: 8px;
-  background: #ffffff;
-  box-shadow: 0 18px 40px rgba(28, 42, 59, 0.08);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-form {
@@ -565,6 +709,15 @@ textarea:focus {
   display: grid;
   gap: 16px;
   padding: 18px;
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+.record-card:hover,
+.summary-card:hover,
+.attendance-card:hover,
+.kpi-card:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 .record-card h2 {
@@ -573,7 +726,7 @@ textarea:focus {
 
 .record-card p {
   margin: 4px 0 0;
-  color: #607083;
+  color: var(--text-soft);
 }
 
 .card-actions {
@@ -585,14 +738,14 @@ textarea:focus {
   display: inline-grid;
   min-height: 30px;
   align-items: center;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0 10px;
   font-size: 0.82rem;
   font-weight: 600;
 }
 
 .status-badge.is-active {
-  color: #1d6b42;
+  color: var(--success);
   background: #e6f7ed;
 }
 
@@ -601,30 +754,45 @@ textarea:focus {
   background: #edf0f3;
 }
 
-.summary-grid {
+.summary-grid,
+.kpi-grid {
   display: grid;
   gap: 14px;
   margin-top: 16px;
 }
 
-.summary-card {
+.summary-card,
+.kpi-card {
   padding: 18px;
 }
 
 .summary-card p {
   margin: 0 0 8px;
-  color: #607083;
+  color: var(--text-soft);
   line-height: 1.45;
 }
 
-.summary-card strong {
+.summary-card strong,
+.kpi-card .kpi-value {
   display: block;
-  color: #18212f;
+  color: var(--text);
   font-size: 1.45rem;
   line-height: 1.25;
   overflow-wrap: anywhere;
   font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
+}
+
+.kpi-card {
+  display: grid;
+  gap: 6px;
+}
+
+.kpi-card .kpi-label {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.88rem;
+  line-height: 1.35;
 }
 
 .attendance-list {
@@ -636,10 +804,11 @@ textarea:focus {
 .attendance-card {
   display: grid;
   gap: 14px;
-  border: 1px solid #d7e0ea;
-  border-radius: 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
   padding: 16px;
-  background: #ffffff;
+  background: var(--surface);
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .attendance-card h2 {
@@ -655,19 +824,25 @@ textarea:focus {
 
 .status-option {
   min-height: 48px;
-  border: 1px solid #cdd8e4;
-  border-radius: 8px;
+  border: 1px solid #cfd8e2;
+  border-radius: var(--radius-input);
   color: #29384a;
   background: #f7fafc;
   font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
   font-weight: 600;
   cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
 }
 
 .status-option.is-selected {
-  border-color: #2b8075;
+  border-color: var(--primary);
   color: #ffffff;
-  background: #2b8075;
+  background: linear-gradient(180deg, var(--primary) 0%, var(--primary-strong) 100%);
+  box-shadow: 0 8px 16px rgba(43, 128, 117, 0.15);
 }
 
 .save-attendance-button {
@@ -679,10 +854,98 @@ textarea:focus {
   margin-top: 16px;
 }
 
+.empty-state {
+  display: grid;
+  gap: 8px;
+  place-items: center;
+  padding: 28px 20px;
+  border: 1px dashed #cfd8e2;
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--text-soft);
+  text-align: center;
+}
+
+.empty-state h2 {
+  margin: 0;
+  color: var(--text);
+}
+
+.empty-state p {
+  margin: 0;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.table-scroll {
+  overflow-x: auto;
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+}
+
+.table-scroll .data-table {
+  min-width: 720px;
+  box-shadow: none;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line-soft);
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  color: var(--text);
+  font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  background: rgba(247, 251, 247, 0.92);
+}
+
+.data-table tr:last-child td {
+  border-bottom: 0;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
   }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-panel,
+.role-banner,
+.app-header,
+.admin-form,
+.record-card,
+.attendance-card,
+.summary-card,
+.menu-card,
+.placeholder-panel,
+.fixed-rule-panel,
+.kpi-card,
+.empty-state {
+  animation: fadeUp 220ms ease-out;
 }
 
 @media (max-width: 560px) {
@@ -691,12 +954,17 @@ textarea:focus {
   }
 
   .login-banner {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 6.2;
   }
 
   .school-logo {
     width: 60px;
     height: 60px;
+  }
+
+  .login-panel {
+    padding: 24px 18px 22px;
+    border-radius: 22px;
   }
 
   .compact-button {
@@ -710,6 +978,10 @@ textarea:focus {
 
   .school-brand {
     align-items: flex-start;
+  }
+
+  .app-header h1 {
+    margin-top: 6px;
   }
 }
 
@@ -725,6 +997,10 @@ textarea:focus {
   .form-grid,
   .summary-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 
   .record-card {

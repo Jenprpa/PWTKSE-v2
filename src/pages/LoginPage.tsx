@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { LoadingScreen } from "../components/LoadingScreen";
-import { SchoolBrand } from "../components/SchoolBrand";
 import { useAuth } from "../providers/AuthProvider";
 
 export function LoginPage() {
@@ -43,7 +42,13 @@ export function LoginPage() {
           <img alt="แบนเนอร์โรงเรียน" className="login-banner-image" src="/assets/school-banner.jpg" />
         </div>
         <section className="login-panel" aria-labelledby="login-title">
-          <SchoolBrand />
+          <div className="login-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+              <path d="M7.5 10V8.5a4.5 4.5 0 1 1 9 0V10" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              <rect x="6" y="10" width="12" height="9" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+              <path d="M12 13.2v2.2" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            </svg>
+          </div>
           <h1 id="login-title">เข้าสู่ระบบ</h1>
           <p className="intro">สำหรับผู้ดูแลระบบและครูผู้สอน</p>
 

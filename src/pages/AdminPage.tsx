@@ -10,6 +10,7 @@ import {
   saveRotationPlan,
   timestampToDateInput,
 } from "../services/adminData";
+import { timestampToDisplayDate } from "../services/attendanceData";
 import {
   FIXED_COURSE_DAY_TH,
   FIXED_COURSE_PERIOD,
@@ -25,7 +26,6 @@ import {
   type Student,
   type StudentForm,
 } from "../types/rotation";
-import { timestampToDisplayDate } from "../services/attendanceData";
 
 type AdminTab = "terms" | "classrooms" | "students" | "bases" | "rotations" | "attendance";
 
@@ -117,6 +117,15 @@ function formatTermName(term?: AcademicTerm) {
   }
 
   return `${term.name} ปีการศึกษา ${term.academicYear} ภาคเรียนที่ ${term.semester}`;
+}
+
+function EmptyState({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="empty-state">
+      <h2>{title}</h2>
+      <p>{description}</p>
+    </div>
+  );
 }
 
 export function AdminPage() {
@@ -311,6 +320,25 @@ export function AdminPage() {
         </p>
       </section>
 
+      <section className="kpi-grid" aria-label="ภาพรวม">
+        <article className="kpi-card">
+          <p className="kpi-label">ห้องเรียนใช้งาน</p>
+          <p className="kpi-value">{data.classrooms.filter((item) => item.active).length}</p>
+        </article>
+        <article className="kpi-card">
+          <p className="kpi-label">นักเรียนใช้งาน</p>
+          <p className="kpi-value">{data.students.filter((item) => item.active).length}</p>
+        </article>
+        <article className="kpi-card">
+          <p className="kpi-label">ฐานการเรียนรู้</p>
+          <p className="kpi-value">{data.bases.filter((item) => item.active).length}</p>
+        </article>
+        <article className="kpi-card">
+          <p className="kpi-label">แผนเวียนฐาน</p>
+          <p className="kpi-value">{data.rotationPlans.filter((item) => item.active).length}</p>
+        </article>
+      </section>
+
       <nav className="admin-tabs" aria-label="เมนูตั้งค่าผู้ดูแล">
         {tabs.map((tab) => (
           <button
@@ -332,8 +360,9 @@ export function AdminPage() {
       {success ? <div className="success-message admin-message">{success}</div> : null}
 
       {isLoading ? (
-        <section className="placeholder-panel">
-          <p>กำลังโหลดข้อมูล...</p>
+        <section className="empty-state" aria-live="polite">
+          <h2>กำลังโหลดข้อมูล</h2>
+          <p>กรุณารอสักครู่</p>
         </section>
       ) : null}
 
@@ -399,23 +428,32 @@ export function AdminPage() {
           </form>
 
           <div className="records-list">
-            {sortedTerms.map((term) => (
-              <article className="record-card" key={term.academicTermId}>
-                <div>
-                  <StatusBadge active={term.active} />
-                  <h2>{term.name}</h2>
-                  <p>ปีการศึกษา {term.academicYear} ภาคเรียนที่ {term.semester}</p>
-                  <p>
-                    {timestampToDateInput(term.startDate)} ถึง {timestampToDateInput(term.endDate)}
-                  </p>
-                </div>
-                <CardActions
-                  onEdit={() => editTerm(term)}
-                  onDeactivate={() => void deactivate("academicTerms", term.academicTermId)}
-                  disabled={!term.active || isSaving}
-                />
-              </article>
-            ))}
+            {sortedTerms.length === 0 ? (
+              <EmptyState
+                title="ยังไม่มีปีการศึกษา"
+                description="เริ่มต้นสร้างปีการศึกษาแรกได้จากฟอร์มด้านบน"
+              />
+            ) : (
+              sortedTerms.map((term) => (
+                <article className="record-card" key={term.academicTermId}>
+                  <div>
+                    <StatusBadge active={term.active} />
+                    <h2>{term.name}</h2>
+                    <p>
+                      ปีการศึกษา {term.academicYear} ภาคเรียนที่ {term.semester}
+                    </p>
+                    <p>
+                      {timestampToDateInput(term.startDate)} ถึง {timestampToDateInput(term.endDate)}
+                    </p>
+                  </div>
+                  <CardActions
+                    onEdit={() => editTerm(term)}
+                    onDeactivate={() => void deactivate("academicTerms", term.academicTermId)}
+                    disabled={!term.active || isSaving}
+                  />
+                </article>
+              ))
+            )}
           </div>
         </section>
       ) : null}
@@ -466,21 +504,28 @@ export function AdminPage() {
           </form>
 
           <div className="records-list">
-            {sortedClassrooms.map((classroom) => (
-              <article className="record-card" key={classroom.classroomId}>
-                <div>
-                  <StatusBadge active={classroom.active} />
-                  <h2>{classroom.displayName}</h2>
-                  <p>ระดับชั้น {classroom.level}</p>
-                  <p>ห้อง {classroom.roomNumber}</p>
-                </div>
-                <CardActions
-                  onEdit={() => editClassroom(classroom)}
-                  onDeactivate={() => void deactivate("classrooms", classroom.classroomId)}
-                  disabled={!classroom.active || isSaving}
-                />
-              </article>
-            ))}
+            {sortedClassrooms.length === 0 ? (
+              <EmptyState
+                title="ยังไม่มีห้องเรียน"
+                description="เพิ่มห้องเรียนเพื่อเตรียมข้อมูลสำหรับการเช็กชื่อ"
+              />
+            ) : (
+              sortedClassrooms.map((classroom) => (
+                <article className="record-card" key={classroom.classroomId}>
+                  <div>
+                    <StatusBadge active={classroom.active} />
+                    <h2>{classroom.displayName}</h2>
+                    <p>ระดับชั้น {classroom.level}</p>
+                    <p>ห้อง {classroom.roomNumber}</p>
+                  </div>
+                  <CardActions
+                    onEdit={() => editClassroom(classroom)}
+                    onDeactivate={() => void deactivate("classrooms", classroom.classroomId)}
+                    disabled={!classroom.active || isSaving}
+                  />
+                </article>
+              ))
+            )}
           </div>
         </section>
       ) : null}
@@ -528,7 +573,7 @@ export function AdminPage() {
                 <input
                   value={studentForm.fullName}
                   onChange={(event) => setStudentForm({ ...studentForm, fullName: event.target.value })}
-                  placeholder="ชื่อ นักเรียน"
+                  placeholder="ชื่อนักเรียน"
                 />
               </label>
             </div>
@@ -539,22 +584,29 @@ export function AdminPage() {
           </form>
 
           <div className="records-list">
-            {sortedStudents.map((student) => (
-              <article className="record-card" key={student.studentId}>
-                <div>
-                  <StatusBadge active={student.active} />
-                  <h2>
-                    {student.studentNumber}. {student.fullName}
-                  </h2>
-                  <p>ห้องเรียน: {student.classroomName}</p>
-                </div>
-                <CardActions
-                  onEdit={() => editStudent(student)}
-                  onDeactivate={() => void deactivate("students", student.studentId)}
-                  disabled={!student.active || isSaving}
-                />
-              </article>
-            ))}
+            {sortedStudents.length === 0 ? (
+              <EmptyState
+                title="ยังไม่มีรายชื่อนักเรียน"
+                description="เพิ่มนักเรียนตามห้องเพื่อให้ครูเช็กชื่อได้ทันที"
+              />
+            ) : (
+              sortedStudents.map((student) => (
+                <article className="record-card" key={student.studentId}>
+                  <div>
+                    <StatusBadge active={student.active} />
+                    <h2>
+                      {student.studentNumber}. {student.fullName}
+                    </h2>
+                    <p>ห้องเรียน: {student.classroomName}</p>
+                  </div>
+                  <CardActions
+                    onEdit={() => editStudent(student)}
+                    onDeactivate={() => void deactivate("students", student.studentId)}
+                    disabled={!student.active || isSaving}
+                  />
+                </article>
+              ))
+            )}
           </div>
         </section>
       ) : null}
@@ -613,21 +665,28 @@ export function AdminPage() {
           </form>
 
           <div className="records-list">
-            {sortedBases.map((base) => (
-              <article className="record-card" key={base.baseId}>
-                <div>
-                  <StatusBadge active={base.active} />
-                  <h2>{base.baseName}</h2>
-                  <p>{base.description || "ไม่มีรายละเอียด"}</p>
-                  <p>ครูประจำฐาน: {base.teacherName}</p>
-                </div>
-                <CardActions
-                  onEdit={() => editBase(base)}
-                  onDeactivate={() => void deactivate("bases", base.baseId)}
-                  disabled={!base.active || isSaving}
-                />
-              </article>
-            ))}
+            {sortedBases.length === 0 ? (
+              <EmptyState
+                title="ยังไม่มีฐานการเรียนรู้"
+                description="สร้างฐานเพื่อเชื่อมกับครูและแผนเวียนฐาน"
+              />
+            ) : (
+              sortedBases.map((base) => (
+                <article className="record-card" key={base.baseId}>
+                  <div>
+                    <StatusBadge active={base.active} />
+                    <h2>{base.baseName}</h2>
+                    <p>{base.description || "ไม่มีรายละเอียด"}</p>
+                    <p>ครูประจำฐาน: {base.teacherName}</p>
+                  </div>
+                  <CardActions
+                    onEdit={() => editBase(base)}
+                    onDeactivate={() => void deactivate("bases", base.baseId)}
+                    disabled={!base.active || isSaving}
+                  />
+                </article>
+              ))
+            )}
           </div>
         </section>
       ) : null}
@@ -710,24 +769,31 @@ export function AdminPage() {
           </form>
 
           <div className="records-list">
-            {sortedRotations.map((rotation) => (
-              <article className="record-card" key={rotation.rotationId}>
-                <div>
-                  <StatusBadge active={rotation.active} />
-                  <h2>
-                    สัปดาห์ที่ {rotation.weekNumber} - {rotation.classroomName}
-                  </h2>
-                  <p>ฐาน: {rotation.baseName}</p>
-                  <p>ครู: {rotation.teacherName}</p>
-                  <p>{formatTermName(data.academicTerms.find((term) => term.academicTermId === rotation.academicTermId))}</p>
-                </div>
-                <CardActions
-                  onEdit={() => editRotation(rotation)}
-                  onDeactivate={() => void deactivate("rotationPlans", rotation.rotationId)}
-                  disabled={!rotation.active || isSaving}
-                />
-              </article>
-            ))}
+            {sortedRotations.length === 0 ? (
+              <EmptyState
+                title="ยังไม่มีแผนเวียนฐาน"
+                description="กำหนดแผนรายสัปดาห์เพื่อให้ครูเช็กชื่อได้ถูกห้อง"
+              />
+            ) : (
+              sortedRotations.map((rotation) => (
+                <article className="record-card" key={rotation.rotationId}>
+                  <div>
+                    <StatusBadge active={rotation.active} />
+                    <h2>
+                      สัปดาห์ที่ {rotation.weekNumber} - {rotation.classroomName}
+                    </h2>
+                    <p>ฐาน: {rotation.baseName}</p>
+                    <p>ครู: {rotation.teacherName}</p>
+                    <p>{formatTermName(data.academicTerms.find((term) => term.academicTermId === rotation.academicTermId))}</p>
+                  </div>
+                  <CardActions
+                    onEdit={() => editRotation(rotation)}
+                    onDeactivate={() => void deactivate("rotationPlans", rotation.rotationId)}
+                    disabled={!rotation.active || isSaving}
+                  />
+                </article>
+              ))
+            )}
           </div>
         </section>
       ) : null}
@@ -736,23 +802,36 @@ export function AdminPage() {
         <section className="placeholder-panel">
           <p className="section-label">รายการเช็กชื่อที่บันทึกแล้ว</p>
           {sortedAttendanceSessions.length === 0 ? (
-            <p>ยังไม่มีรายการเช็กชื่อ</p>
+            <EmptyState
+              title="ยังไม่มีรายการเช็กชื่อ"
+              description="เมื่อครูบันทึกข้อมูล รายการจะปรากฏตรงนี้"
+            />
           ) : (
-            <div className="records-list">
-              {sortedAttendanceSessions.map((session) => (
-                <article className="record-card" key={session.sessionId}>
-                  <div>
-                    <StatusBadge active={session.status === "submitted"} />
-                    <h2>
-                      {session.classroomName} - {session.baseName}
-                    </h2>
-                    <p>วันที่: {session.attendanceDate}</p>
-                    <p>สัปดาห์ที่: {session.weekNumber}</p>
-                    <p>ครู: {session.teacherName}</p>
-                    <p>ส่งเมื่อ: {timestampToDisplayDate(session.submittedAt)}</p>
-                  </div>
-                </article>
-              ))}
+            <div className="table-scroll">
+              <table className="data-table" aria-label="รายการเช็กชื่อ">
+                <thead>
+                  <tr>
+                    <th>ห้องเรียน</th>
+                    <th>ฐาน</th>
+                    <th>วันที่</th>
+                    <th>สัปดาห์</th>
+                    <th>ครู</th>
+                    <th>ส่งเมื่อ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedAttendanceSessions.map((session) => (
+                    <tr key={session.sessionId}>
+                      <td>{session.classroomName}</td>
+                      <td>{session.baseName}</td>
+                      <td>{session.attendanceDate}</td>
+                      <td>{session.weekNumber}</td>
+                      <td>{session.teacherName}</td>
+                      <td>{timestampToDisplayDate(session.submittedAt)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </section>
@@ -760,6 +839,7 @@ export function AdminPage() {
     </RoleLayout>
   );
 }
+
 function FormTitle({ title, onReset }: { title: string; onReset: () => void }) {
   return (
     <div className="form-title">
