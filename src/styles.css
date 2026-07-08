@@ -919,6 +919,208 @@ textarea:focus {
   margin-bottom: 16px;
 }
 
+.student-import-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.student-import-entry h2,
+.student-import-entry p {
+  margin: 0;
+}
+
+.student-import-entry span {
+  color: var(--primary);
+  font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.import-page-actions {
+  display: flex;
+  margin-bottom: 16px;
+}
+
+.import-back-link {
+  text-decoration: none;
+}
+
+.import-intro-card,
+.import-upload-card,
+.import-preview-card,
+.import-submit-card,
+.import-file-messages {
+  margin-bottom: 16px;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.import-intro-card h1,
+.import-intro-card p,
+.import-upload-card h2,
+.import-upload-card p,
+.import-preview-card h2,
+.import-preview-card p,
+.import-submit-card h2,
+.import-submit-card p {
+  margin: 0;
+}
+
+.import-intro-card,
+.import-upload-card,
+.import-submit-card {
+  display: grid;
+  gap: 14px;
+}
+
+.import-template-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.file-picker {
+  display: grid;
+  gap: 10px;
+  min-height: 112px;
+  place-items: center;
+  padding: 18px;
+  border: 2px dashed #b9cbc1;
+  border-radius: var(--radius-input);
+  color: var(--primary-strong);
+  background: var(--primary-soft);
+  text-align: center;
+  cursor: pointer;
+}
+
+.file-picker span {
+  font-family: "Kanit", "Anuphan", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+}
+
+.file-picker input {
+  width: min(100%, 420px);
+  min-height: 44px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-strong);
+}
+
+.import-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.import-valid-card {
+  border-color: #b9ddc7;
+  background: var(--success-soft);
+}
+
+.import-warning-card {
+  border-color: #e8d9a7;
+  background: var(--warning-soft);
+}
+
+.import-error-card {
+  border-color: #e5c1c1;
+  background: var(--danger-soft);
+}
+
+.import-file-messages {
+  display: grid;
+  gap: 8px;
+}
+
+.import-message {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+}
+
+.import-message.is-error {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.import-message.is-warning {
+  color: #6f5b21;
+  background: var(--warning-soft);
+}
+
+.import-preview-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.import-preview-heading > p {
+  max-width: 360px;
+  color: var(--text-soft);
+  text-align: right;
+}
+
+.import-preview-table {
+  min-width: 820px;
+}
+
+.import-preview-table .import-row-error td {
+  background: rgba(255, 244, 244, 0.82);
+}
+
+.import-status {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.88rem;
+}
+
+.import-status:last-child {
+  margin-bottom: 0;
+}
+
+.import-status.is-valid {
+  color: var(--success);
+}
+
+.import-status.is-error {
+  color: var(--danger);
+}
+
+.import-status.is-warning {
+  color: #6f5b21;
+}
+
+.import-progress {
+  display: grid;
+  gap: 6px;
+}
+
+.import-progress progress {
+  width: 100%;
+  height: 14px;
+  accent-color: var(--primary);
+}
+
+.import-progress span {
+  color: var(--text-soft);
+}
+
+.import-empty-state {
+  margin-bottom: 16px;
+}
+
 .report-entry-card {
   display: grid;
   gap: 8px;
@@ -1279,6 +1481,24 @@ textarea:focus {
     width: min(200px, 72vw);
   }
 
+  .import-template-actions,
+  .import-page-actions {
+    display: grid;
+  }
+
+  .import-template-actions .compact-button,
+  .import-back-link {
+    width: 100%;
+  }
+
+  .import-preview-heading {
+    display: grid;
+  }
+
+  .import-preview-heading > p {
+    text-align: left;
+  }
+
   .compact-button {
     width: 100%;
   }
@@ -1329,6 +1549,10 @@ textarea:focus {
   }
 
   .kpi-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .import-summary {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 

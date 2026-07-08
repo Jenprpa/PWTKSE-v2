@@ -540,6 +540,14 @@ export function AdminPage() {
 
       {!isLoading && activeTab === "students" ? (
         <section className="admin-section">
+          <Link className="menu-card student-import-entry" to="/admin/students/import">
+            <div>
+              <p className="section-label">นำเข้าหลายคน</p>
+              <h2>Student Import Wizard</h2>
+              <p>ตรวจสอบและนำเข้ารายชื่อนักเรียนจาก Excel หรือ CSV</p>
+            </div>
+            <span aria-hidden="true">›</span>
+          </Link>
           <form
             className="admin-form"
             onSubmit={(event) => {

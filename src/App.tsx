@@ -8,6 +8,9 @@ const AdminPage = lazy(() => import("./pages/AdminPage").then((module) => ({ def
 const ReportsPage = lazy(() =>
   import("./pages/ReportsPage").then((module) => ({ default: module.ReportsPage })),
 );
+const StudentImportPage = lazy(() =>
+  import("./pages/StudentImportPage").then((module) => ({ default: module.StudentImportPage })),
+);
 const TeacherPage = lazy(() =>
   import("./pages/TeacherPage").then((module) => ({ default: module.TeacherPage })),
 );
@@ -22,6 +25,16 @@ export default function App() {
           <ProtectedRoute allowedRole="admin">
             <Suspense fallback={<LoadingScreen />}>
               <AdminPage />
+            </Suspense>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/students/import"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <Suspense fallback={<LoadingScreen />}>
+              <StudentImportPage />
             </Suspense>
           </ProtectedRoute>
         }
