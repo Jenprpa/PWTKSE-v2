@@ -326,6 +326,10 @@ export function AdminPage() {
           <h2>รายงานและสถิติ</h2>
           <p>ดู KPI, กราฟ, heatmap, และส่งออก PDF / Excel</p>
         </Link>
+        <Link className="menu-card report-entry-card" to="/admin/teachers/import">
+          <h2>นำเข้าบัญชีครู</h2>
+          <p>สร้าง Firebase Auth และ profile ครูจาก Excel หรือ CSV</p>
+        </Link>
       </section>
 
       <section className="kpi-grid" aria-label="ภาพรวม">

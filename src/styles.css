@@ -951,6 +951,7 @@ textarea:focus {
 }
 
 .import-intro-card,
+.import-note-card,
 .import-upload-card,
 .import-preview-card,
 .import-submit-card,
@@ -965,6 +966,8 @@ textarea:focus {
 
 .import-intro-card h1,
 .import-intro-card p,
+.import-note-card h2,
+.import-note-card p,
 .import-upload-card h2,
 .import-upload-card p,
 .import-preview-card h2,
@@ -975,10 +978,15 @@ textarea:focus {
 }
 
 .import-intro-card,
+.import-note-card,
 .import-upload-card,
 .import-submit-card {
   display: grid;
   gap: 14px;
+}
+
+.import-note-card {
+  background: linear-gradient(135deg, rgba(231, 243, 238, 0.95), rgba(255, 255, 255, 0.96));
 }
 
 .import-template-actions {
