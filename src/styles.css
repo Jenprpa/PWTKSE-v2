@@ -1084,6 +1084,22 @@ textarea:focus {
   min-width: 820px;
 }
 
+.rotation-import-table {
+  min-width: 1180px;
+}
+
+.rotation-import-table input,
+.rotation-import-table select {
+  min-width: 130px;
+  min-height: 42px;
+  padding: 8px 10px;
+  font-size: 0.92rem;
+}
+
+.rotation-import-controls {
+  align-items: stretch;
+}
+
 .import-preview-table .import-row-error td {
   background: rgba(255, 244, 244, 0.82);
 }

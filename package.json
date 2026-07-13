@@ -11,6 +11,7 @@
   "dependencies": {
     "@vitejs/plugin-react": "latest",
     "firebase": "latest",
+    "jszip": "^3.10.1",
     "papaparse": "^5.5.4",
     "react": "latest",
     "react-dom": "latest",

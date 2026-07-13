@@ -330,6 +330,10 @@ export function AdminPage() {
           <h2>นำเข้าบัญชีครู</h2>
           <p>สร้าง Firebase Auth และ profile ครูจาก Excel หรือ CSV</p>
         </Link>
+        <Link className="menu-card report-entry-card" to="/admin/rotation-plans/import">
+          <h2>นำเข้าแผนเวียนฐาน</h2>
+          <p>อ่านตาราง Matrix และนำเข้าแผนเวียนฐานรายสัปดาห์</p>
+        </Link>
       </section>
 
       <section className="kpi-grid" aria-label="ภาพรวม">
@@ -713,6 +717,14 @@ export function AdminPage() {
 
       {!isLoading && activeTab === "rotations" ? (
         <section className="admin-section">
+          <Link className="menu-card student-import-entry" to="/admin/rotation-plans/import">
+            <div>
+              <p className="section-label">นำเข้าหลายรายการ</p>
+              <h2>Rotation Plan Matrix Import Wizard</h2>
+              <p>ตรวจสอบและนำเข้าแผนเวียนฐานจาก Excel matrix หรือ flat spreadsheet</p>
+            </div>
+            <span aria-hidden="true">›</span>
+          </Link>
           <form
             className="admin-form"
             onSubmit={(event) => {
