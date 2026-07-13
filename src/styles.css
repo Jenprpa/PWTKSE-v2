@@ -180,6 +180,10 @@ p {
   z-index: 1;
 }
 
+.register-panel {
+  max-width: 640px;
+}
+
 .login-banner,
 .role-banner {
   width: 100%;
@@ -721,6 +725,44 @@ textarea:focus {
   background: transparent;
   font-weight: 600;
   cursor: pointer;
+}
+
+.register-login-link {
+  justify-self: center;
+  text-decoration: none;
+}
+
+.pending-approval-card {
+  max-width: 560px;
+}
+
+.pending-profile-summary {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-input);
+  padding: 14px;
+  background: rgba(247, 251, 247, 0.92);
+  text-align: left;
+}
+
+.pending-profile-summary p {
+  margin: 0;
+}
+
+.status-badge.is-pending {
+  color: #6f5b21;
+  background: var(--warning-soft);
+}
+
+.approval-controls {
+  display: grid;
+  gap: 12px;
+}
+
+.user-approval-card {
+  align-items: stretch;
 }
 
 .form-grid {

@@ -3,6 +3,8 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { LoadingScreen } from "./components/LoadingScreen";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LoginPage } from "./pages/LoginPage";
+import { PendingApprovalPage } from "./pages/PendingApprovalPage";
+import { RegisterPage } from "./pages/RegisterPage";
 
 const AdminPage = lazy(() => import("./pages/AdminPage").then((module) => ({ default: module.AdminPage })));
 const ReadinessPage = lazy(() =>
@@ -20,6 +22,9 @@ const StudentImportPage = lazy(() =>
 const TeacherImportPage = lazy(() =>
   import("./pages/TeacherImportPage").then((module) => ({ default: module.TeacherImportPage })),
 );
+const PendingUsersPage = lazy(() =>
+  import("./pages/PendingUsersPage").then((module) => ({ default: module.PendingUsersPage })),
+);
 const TeacherPage = lazy(() =>
   import("./pages/TeacherPage").then((module) => ({ default: module.TeacherPage })),
 );
@@ -28,6 +33,8 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/pending" element={<PendingApprovalPage />} />
       <Route
         path="/admin"
         element={
@@ -74,6 +81,16 @@ export default function App() {
           <ProtectedRoute allowedRole="admin">
             <Suspense fallback={<LoadingScreen />}>
               <TeacherImportPage />
+            </Suspense>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users/pending"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <Suspense fallback={<LoadingScreen />}>
+              <PendingUsersPage />
             </Suspense>
           </ProtectedRoute>
         }

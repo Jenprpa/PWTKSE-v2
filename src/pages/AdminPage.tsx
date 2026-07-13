@@ -334,6 +334,10 @@ export function AdminPage() {
           <h2>นำเข้าบัญชีครู</h2>
           <p>สร้าง Firebase Auth และ profile ครูจาก Excel หรือ CSV</p>
         </Link>
+        <Link className="menu-card report-entry-card" to="/admin/users/pending">
+          <h2>อนุมัติสมาชิก</h2>
+          <p>ตรวจสอบผู้สมัครใหม่ อนุมัติ ปฏิเสธ และเปิด/ปิดบัญชีครูก่อนเข้าใช้งานจริง</p>
+        </Link>
         <Link className="menu-card report-entry-card" to="/admin/rotation-plans/import">
           <h2>นำเข้าแผนเวียนฐาน</h2>
           <p>อ่านตาราง Matrix และนำเข้าแผนเวียนฐานรายสัปดาห์</p>

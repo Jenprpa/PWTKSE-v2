@@ -21,6 +21,8 @@ export type AuthStatus =
   | "loading-profile"
   | "authenticated"
   | "unauthenticated"
+  | "pending"
+  | "rejected"
   | "blocked"
   | "missing-profile"
   | "error";
@@ -38,6 +40,8 @@ const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const MISSING_PROFILE_MESSAGE = "ไม่พบข้อมูลผู้ใช้ในระบบ กรุณาติดต่อผู้ดูแล";
 export const INACTIVE_ACCOUNT_MESSAGE = "บัญชีนี้ถูกระงับการใช้งาน";
+export const PENDING_APPROVAL_MESSAGE = "บัญชีของคุณอยู่ระหว่างรอผู้ดูแลระบบอนุมัติ";
+export const REJECTED_ACCOUNT_MESSAGE = "บัญชีนี้ไม่ได้รับการอนุมัติให้ใช้งาน";
 const PROFILE_LOAD_ERROR_MESSAGE = "ไม่สามารถโหลดข้อมูลผู้ใช้ได้ กรุณาลองใหม่อีกครั้ง";
 const LOGIN_ERROR_MESSAGE = "อีเมลหรือรหัสผ่านไม่ถูกต้อง";
 const INVALID_ROLE_MESSAGE = "บทบาทผู้ใช้ไม่ถูกต้อง กรุณาติดต่อผู้ดูแล";
@@ -87,6 +91,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setProfile(null);
       setStatus("error");
       setError(INVALID_ROLE_MESSAGE);
+      return;
+    }
+
+    if (userProfile.status === "pending") {
+      setProfile(userProfile);
+      setStatus("pending");
+      setError(PENDING_APPROVAL_MESSAGE);
+      return;
+    }
+
+    if (userProfile.status === "rejected") {
+      setProfile(userProfile);
+      setStatus("rejected");
+      setError(REJECTED_ACCOUNT_MESSAGE);
       return;
     }
 

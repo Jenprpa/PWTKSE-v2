@@ -19,7 +19,7 @@ export function RoleGuard({
     return <LoadingScreen />;
   }
 
-  if (status === "missing-profile" || status === "blocked" || status === "error") {
+  if (status === "missing-profile" || status === "pending" || status === "rejected" || status === "blocked" || status === "error") {
     return <AccessMessage message={error} />;
   }
 

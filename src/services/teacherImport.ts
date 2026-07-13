@@ -360,6 +360,7 @@ export async function importTeacherRows(
         displayName: row.displayName,
         email: row.normalizedEmail,
         role: "teacher",
+        status: row.activeValue ? "approved" : "rejected",
         active: row.activeValue,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp(),

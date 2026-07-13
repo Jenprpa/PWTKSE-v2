@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { LoadingScreen } from "../components/LoadingScreen";
 import { useAuth } from "../providers/AuthProvider";
 
@@ -14,6 +14,10 @@ export function LoginPage() {
   useEffect(() => {
     if (status === "authenticated" && profile) {
       navigate(`/${profile.role}`, { replace: true });
+    }
+
+    if (status === "pending" || status === "rejected") {
+      navigate("/pending", { replace: true });
     }
   }, [navigate, profile, status]);
 
@@ -114,6 +118,9 @@ export function LoginPage() {
             <button className="primary-button" disabled={isSubmitting} type="submit">
               {isSubmitting ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
             </button>
+            <Link className="text-button register-login-link" to="/register">
+              สมัครสมาชิก
+            </Link>
           </form>
         </section>
       </section>

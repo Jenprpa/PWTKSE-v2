@@ -1,0 +1,164 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc(uid) {
+      return /databases/$(database)/documents/users/$(uid);
+    }
+
+    function currentUser() {
+      return get(userDoc(request.auth.uid)).data;
+    }
+
+    function isApprovedUser() {
+      return isSignedIn() &&
+        exists(userDoc(request.auth.uid)) &&
+        currentUser().active == true &&
+        (
+          !('status' in currentUser()) ||
+          currentUser().status == 'approved'
+        );
+    }
+
+    function isAdmin() {
+      return isApprovedUser() && currentUser().role == 'admin';
+    }
+
+    function isTeacher() {
+      return isApprovedUser() && currentUser().role == 'teacher';
+    }
+
+    function sessionDoc(sessionId) {
+      return /databases/$(database)/documents/attendanceSessions/$(sessionId);
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function hasOnlyUserFields(data) {
+      return data.keys().hasOnly([
+        'displayName',
+        'email',
+        'phone',
+        'department',
+        'base',
+        'role',
+        'status',
+        'active',
+        'approvedAt',
+        'rejectedAt',
+        'createdAt',
+        'updatedAt'
+      ]);
+    }
+
+    function validOptionalString(data, field, maxLength) {
+      return !(field in data) || (data[field] is string && data[field].size() <= maxLength);
+    }
+
+    function validUserProfile(data) {
+      return hasOnlyUserFields(data) &&
+        data.displayName is string &&
+        data.displayName.size() >= 3 &&
+        data.displayName.size() <= 120 &&
+        data.email is string &&
+        data.email.size() <= 160 &&
+        data.email.matches('^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$') &&
+        data.role in ['admin', 'teacher'] &&
+        data.active is bool &&
+        (!('status' in data) || data.status in ['pending', 'approved', 'rejected']) &&
+        validOptionalString(data, 'phone', 30) &&
+        validOptionalString(data, 'department', 120) &&
+        validOptionalString(data, 'base', 120) &&
+        data.createdAt is timestamp &&
+        data.updatedAt is timestamp;
+    }
+
+    function validSelfRegistration(uid) {
+      return isOwner(uid) &&
+        validUserProfile(request.resource.data) &&
+        request.resource.data.role == 'teacher' &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.active == false;
+    }
+
+    function userRoleControlsUnchanged() {
+      return request.resource.data.role == resource.data.role &&
+        request.resource.data.active == resource.data.active &&
+        (
+          (!('status' in request.resource.data) && !('status' in resource.data)) ||
+          request.resource.data.status == resource.data.status
+        );
+    }
+
+    function validOwnUserUpdate(uid) {
+      return isOwner(uid) &&
+        validUserProfile(request.resource.data) &&
+        userRoleControlsUnchanged() &&
+        request.resource.data.email == resource.data.email &&
+        request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    match /users/{uid} {
+      allow create: if validSelfRegistration(uid) || (isAdmin() && validUserProfile(request.resource.data));
+      allow read: if isOwner(uid) || isAdmin();
+      allow update: if (isAdmin() && validUserProfile(request.resource.data)) || validOwnUserUpdate(uid);
+      allow delete: if false;
+    }
+
+    match /academicTerms/{termId} {
+      allow read: if isApprovedUser();
+      allow write: if isAdmin();
+    }
+
+    match /classrooms/{classroomId} {
+      allow read: if isApprovedUser();
+      allow write: if isAdmin();
+    }
+
+    match /bases/{baseId} {
+      allow read: if isApprovedUser();
+      allow write: if isAdmin();
+    }
+
+    match /rotationPlans/{rotationId} {
+      allow read: if isAdmin() || (isTeacher() && resource.data.teacherUid == request.auth.uid);
+      allow write: if isAdmin();
+    }
+
+    match /students/{studentId} {
+      allow read: if isApprovedUser();
+      allow write: if isAdmin();
+    }
+
+    match /attendanceSessions/{sessionId} {
+      allow read: if isAdmin() || (isTeacher() && resource.data.teacherUid == request.auth.uid);
+      allow create: if isTeacher() &&
+        request.resource.data.teacherUid == request.auth.uid &&
+        request.resource.data.status in ['draft', 'submitted'];
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /attendanceRecords/{recordId} {
+      allow read: if isAdmin() || (
+        isTeacher() &&
+        get(sessionDoc(resource.data.sessionId)).data.teacherUid == request.auth.uid
+      );
+      allow create: if isTeacher() &&
+        request.resource.data.status in ['present', 'absent', 'leave', 'late'] &&
+        getAfter(sessionDoc(request.resource.data.sessionId)).data.teacherUid == request.auth.uid;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
