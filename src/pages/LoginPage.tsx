@@ -8,6 +8,7 @@ export function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -69,15 +70,37 @@ export function LoginPage() {
 
             <label>
               รหัสผ่าน
-              <input
-                autoComplete="current-password"
-                name="password"
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="กรอกรหัสผ่าน"
-                required
-                type="password"
-                value={password}
-              />
+              <span className="password-field">
+                <input
+                  autoComplete="current-password"
+                  name="password"
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="กรอกรหัสผ่าน"
+                  required
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                />
+                <button
+                  aria-label={showPassword ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"}
+                  className="password-toggle"
+                  type="button"
+                  onClick={() => setShowPassword((current) => !current)}
+                >
+                  {showPassword ? (
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M3 3l18 18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                      <path d="M10.6 10.6a2 2 0 0 0 2.8 2.8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                      <path d="M7.4 7.8C5.2 8.9 3.6 10.5 2.5 12c2.2 3.1 5.4 5 9.5 5 1.4 0 2.8-.2 4-.7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M10.8 7.1c.4-.1.8-.1 1.2-.1 4.1 0 7.3 1.9 9.5 5-.6.8-1.2 1.6-2 2.3" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M2.5 12c2.2-3.1 5.4-5 9.5-5s7.3 1.9 9.5 5c-2.2 3.1-5.4 5-9.5 5s-7.3-1.9-9.5-5Z" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                      <circle cx="12" cy="12" r="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+                    </svg>
+                  )}
+                </button>
+              </span>
             </label>
 
             {error ? (
