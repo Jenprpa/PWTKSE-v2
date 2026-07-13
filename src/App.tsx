@@ -5,6 +5,9 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LoginPage } from "./pages/LoginPage";
 
 const AdminPage = lazy(() => import("./pages/AdminPage").then((module) => ({ default: module.AdminPage })));
+const ReadinessPage = lazy(() =>
+  import("./pages/ReadinessPage").then((module) => ({ default: module.ReadinessPage })),
+);
 const ReportsPage = lazy(() =>
   import("./pages/ReportsPage").then((module) => ({ default: module.ReportsPage })),
 );
@@ -31,6 +34,16 @@ export default function App() {
           <ProtectedRoute allowedRole="admin">
             <Suspense fallback={<LoadingScreen />}>
               <AdminPage />
+            </Suspense>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/readiness"
+        element={
+          <ProtectedRoute allowedRole="admin">
+            <Suspense fallback={<LoadingScreen />}>
+              <ReadinessPage />
             </Suspense>
           </ProtectedRoute>
         }

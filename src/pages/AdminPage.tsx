@@ -322,6 +322,10 @@ export function AdminPage() {
       </section>
 
       <section className="menu-grid admin-entry-grid" aria-label="report shortcuts">
+        <Link className="menu-card report-entry-card" to="/admin/readiness">
+          <h2>ตรวจความพร้อมข้อมูล</h2>
+          <p>Data Readiness: ตรวจ term, ห้อง, นักเรียน, ครู, ฐาน และแผนเวียนฐานก่อน go-live</p>
+        </Link>
         <Link className="menu-card report-entry-card" to="/reports">
           <h2>รายงานและสถิติ</h2>
           <p>ดู KPI, กราฟ, heatmap, และส่งออก PDF / Excel</p>
