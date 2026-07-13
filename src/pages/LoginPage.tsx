@@ -57,7 +57,9 @@ export function LoginPage() {
             <label>
               อีเมล
               <input
+                autoCapitalize="none"
                 autoComplete="email"
+                autoCorrect="off"
                 inputMode="email"
                 name="email"
                 onChange={(event) => setEmail(event.target.value)}
