@@ -87,27 +87,10 @@ service cloud.firestore {
         request.resource.data.active == false;
     }
 
-    function userRoleControlsUnchanged() {
-      return request.resource.data.role == resource.data.role &&
-        request.resource.data.active == resource.data.active &&
-        (
-          (!('status' in request.resource.data) && !('status' in resource.data)) ||
-          request.resource.data.status == resource.data.status
-        );
-    }
-
-    function validOwnUserUpdate(uid) {
-      return isOwner(uid) &&
-        validUserProfile(request.resource.data) &&
-        userRoleControlsUnchanged() &&
-        request.resource.data.email == resource.data.email &&
-        request.resource.data.createdAt == resource.data.createdAt;
-    }
-
     match /users/{uid} {
       allow create: if validSelfRegistration(uid) || (isAdmin() && validUserProfile(request.resource.data));
       allow read: if isOwner(uid) || isAdmin();
-      allow update: if (isAdmin() && validUserProfile(request.resource.data)) || validOwnUserUpdate(uid);
+      allow update: if isAdmin() && validUserProfile(request.resource.data);
       allow delete: if false;
     }
 
